@@ -149,3 +149,9 @@ npm run dev
 - Build output directory: `dist`
 
 > 把 `YOUR_GITHUB_REPO_URL` 替换成你的仓库地址，例如 `https://github.com/<you>/<repo>`。
+
+## License
+
+This project is open-sourced under the MIT License.
+
+Template by RararXD.
