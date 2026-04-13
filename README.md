@@ -3,6 +3,7 @@
 这是一个可直接复用的多作者静态博客模板仓库。
 
 - 完整使用文档：`docs/使用说明.md`
+- Giscus 评论教程：`docs/Giscus配置教程.md`
 - 适合部署到 Cloudflare Pages / GitHub Pages 等静态托管平台
 
 一个参考 Hexo 思路的简约个人网站（纯静态构建）：
