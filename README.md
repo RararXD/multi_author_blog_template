@@ -154,4 +154,4 @@ npm run dev
 
 This project is open-sourced under the MIT License.
 
-Template by RararXD.
+Template attribution: customize for your own project as needed.

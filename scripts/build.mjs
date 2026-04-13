@@ -14,9 +14,9 @@ const authorsDir = path.join(contentDir, 'authors');
 const aboutPath = path.join(contentDir, 'about.md');
 const imagesDir = path.join(contentDir, 'images');
 const distDir = path.join(root, 'dist');
-const siteDomain = 'blog.sudormrf.tech';
+const siteDomain = 'example.com';
 const siteUrl = (process.env.SITE_URL || `https://${siteDomain}`).replace(/\/+$/g, '');
-const siteName = 'Rs Blog';
+const siteName = 'Multi Author Blog Template';
 const defaultOgImagePath = '/apple-touch-icon.png';
 const defaultAuthorAvatar = '/default-avatar.svg';
 const pageBackgrounds = {
@@ -883,7 +883,7 @@ function buildSite(posts, authors) {
 
   const indexContent = `<section class="hero">
     <h1>Overview</h1>
-    <p class="meta">由 Rarar_XD 和 rf 共创的博客 · <a class="about-entry" href="/about/">查看本站相关信息</a></p>
+    <p class="meta">这是一个多作者博客模板演示站点 · <a class="about-entry" href="/about/">查看本站相关信息</a></p>
   </section>
   <h2 class="section-title">Popular Topics</h2>
   <section class="tag-cloud-section">
@@ -899,8 +899,8 @@ function buildSite(posts, authors) {
     layout,
     withSeo(
       {
-      title: 'Rs Blog | 技术与生活记录',
-      description: 'Rs Blog 由 Rarar_XD 与 rf 共创，持续更新技术实践、项目复盘与生活记录。',
+      title: `${siteName} | 技术与生活记录`,
+      description: '一个可复用的多作者博客模板，适合写作与部署演示。',
       content: indexContent,
       year,
       bodyClass: 'home-page'
@@ -923,7 +923,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: `${escapeHtml(aboutPage.title)} | Rs Blog`,
+        title: `${escapeHtml(aboutPage.title)} | ${siteName}`,
         description: escapeHtml(aboutPage.description),
         content: aboutContent,
         year
@@ -955,7 +955,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: 'Authors | Rs Blog',
+        title: `Authors | ${siteName}`,
         description: 'Author profile list',
         content: `<section class="hero"><h1>Authors</h1><p class="meta">作者列表与简介</p></section><ul class="author-grid">${authorCards}</ul>`,
         year
@@ -991,7 +991,7 @@ function buildSite(posts, authors) {
         layout,
         withSeo(
           {
-          title: `${escapeHtml(author.name)} | Rs Blog`,
+          title: `${escapeHtml(author.name)} | ${siteName}`,
           description: escapeHtml(author.summary),
           content: authorContent,
           year
@@ -1041,7 +1041,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: 'Category | Rs Blog',
+        title: `Category | ${siteName}`,
         description: 'Post categories',
         content: `<section class="hero"><h1>Category</h1><p class="meta">按分类浏览文章</p></section><div class="category-page"><aside class="category-sidebar"><h3>类别索引</h3><nav class="category-nav">${categoryNav}</nav></aside><div class="category-content">${categoryBlocks}</div></div>`,
         year
@@ -1067,7 +1067,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: 'Posts | Rs Blog',
+        title: `Posts | ${siteName}`,
         description: 'All posts list',
         content: allPostsContent,
         year
@@ -1096,7 +1096,7 @@ function buildSite(posts, authors) {
         layout,
         withSeo(
           {
-          title: `${escapeHtml(cat)} | Rs Blog`,
+          title: `${escapeHtml(cat)} | ${siteName}`,
           description: `${escapeHtml(cat)} 分类下的文章`,
           content: categoryContent,
           year
@@ -1126,7 +1126,7 @@ function buildSite(posts, authors) {
         layout,
         withSeo(
           {
-          title: `${escapeHtml(tag)} | Rs Blog`,
+          title: `${escapeHtml(tag)} | ${siteName}`,
           description: `${escapeHtml(tag)} 标签下的文章`,
           content: tagContent,
           year
@@ -1239,7 +1239,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: 'Search | Rs Blog',
+        title: `Search | ${siteName}`,
         description: 'Search posts',
         content: searchContent,
         year
@@ -1351,7 +1351,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: `${escapeHtml(post.title)} | Rs Blog`,
+        title: `${escapeHtml(post.title)} | ${siteName}`,
         description: escapeHtml(post.summary),
         content,
         year
@@ -1370,7 +1370,7 @@ function buildSite(posts, authors) {
       layout,
       withSeo(
         {
-        title: '404 | Rs Blog',
+        title: `404 | ${siteName}`,
         description: 'Page not found',
         content: '<h1>404</h1><p>页面不存在，返回 <a href="/">首页</a>。</p>',
         year
