@@ -1,6 +1,6 @@
 # Multi Author Blog Template
 
-这是一个可直接复用的多作者静态博客模板仓库。
+这是一个可直接复用的多作者静态博客模板仓库。用完随手点个🌟（？）🌹
 
 - 完整使用文档：`docs/使用说明.md`
 - Giscus 评论教程：`docs/Giscus配置教程.md`
