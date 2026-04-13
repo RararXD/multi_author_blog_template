@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "provider": "giscus",
+  "repo": "RararXD/sudo_blog_comment",
+  "repoId": "R_kgDOSAc-sA",
+  "category": "Ideas",
+  "categoryId": "DIC_kwDOSAc-sM4C6qoo",
+  "mapping": "pathname",
+  "strict": false,
+  "reactionsEnabled": true,
+  "emitMetadata": false,
+  "inputPosition": "bottom",
+  "lang": "zh-CN",
+  "themeLight": "light",
+  "themeDark": "dark",
+  "loading": "lazy",
+  "quoteMaxLength": 800
+}

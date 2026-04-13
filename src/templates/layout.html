@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1WMZK2JD2R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-1WMZK2JD2R');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}" />
+    <meta name="application-name" content="Rs Blog" />
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <link rel="canonical" href="{{canonicalUrl}}" />
+    <meta property="og:title" content="{{ogTitle}}" />
+    <meta property="og:description" content="{{ogDescription}}" />
+    <meta property="og:url" content="{{ogUrl}}" />
+    <meta property="og:type" content="{{ogType}}" />
+    <meta property="og:image" content="{{ogImage}}" />
+    <meta property="og:site_name" content="Rs Blog" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="{{twitterCard}}" />
+    <meta name="twitter:title" content="{{ogTitle}}" />
+    <meta name="twitter:description" content="{{ogDescription}}" />
+    <meta name="twitter:image" content="{{ogImage}}" />
+    <script>
+      (() => {
+        try {
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          const getAutoTheme = () => (mediaQuery.matches ? 'dark' : 'light');
+          const savedMode = localStorage.getItem('theme-mode') || 'auto';
+          const theme = savedMode === 'auto' ? getAutoTheme() : savedMode;
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (error) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="stylesheet" href="/assets/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  </head>
+  <body class="{{bodyClass}} page-pending" style="{{bodyStyle}}">
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <div class="spinner"></div>
+    </div>
+    <header class="site-header" data-nosnippet>
+      <a class="brand" href="/">
+        <span class="brand-mark-wrap"><img class="brand-mark" src="/favicon.ico" alt="Rs Blog logo" /></span>
+        <span>Rs Blog</span>
+      </a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/authors/">Authors</a>
+        <a href="/categories/">Category</a>
+        <a href="/search/">Search</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题">Auto</button>
+      </nav>
+    </header>
+    <main class="container">{{content}}</main>
+    <footer class="site-footer">© {{year}} RararXD RF</footer>
+    <script>
+      (() => {
+        const loader = document.getElementById('page-loader');
+        const themeToggle = document.getElementById('theme-toggle');
+        let loaderTimer = null;
+
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const getAutoTheme = () => (mediaQuery.matches ? 'dark' : 'light');
+
+        const applyTheme = (mode) => {
+          const theme = mode === 'auto' ? getAutoTheme() : mode;
+          document.documentElement.setAttribute('data-theme', theme);
+          if (themeToggle) {
+            themeToggle.textContent = mode === 'auto' ? 'Auto' : theme === 'dark' ? 'Dark' : 'Light';
+          }
+          if (window.syncGiscusTheme) {
+            window.syncGiscusTheme(theme);
+          }
+        };
+
+        let currentMode = localStorage.getItem('theme-mode') || 'auto';
+        applyTheme(currentMode);
+
+        if (themeToggle) {
+          themeToggle.addEventListener('click', () => {
+            const next = currentMode === 'auto' ? 'light' : currentMode === 'light' ? 'dark' : 'auto';
+            currentMode = next;
+            localStorage.setItem('theme-mode', next);
+            applyTheme(next);
+          });
+        }
+
+        if (mediaQuery.addEventListener) {
+          mediaQuery.addEventListener('change', () => {
+            if (currentMode === 'auto') {
+              applyTheme('auto');
+            }
+          });
+        }
+
+        const showLoader = () => {
+          loader.classList.add('show');
+        };
+        const startLeaving = () => {
+          document.body.classList.add('is-leaving');
+        };
+
+        const hideLoader = () => {
+          loader.classList.remove('show');
+          if (loaderTimer) {
+            clearTimeout(loaderTimer);
+            loaderTimer = null;
+          }
+        };
+
+        const revealPage = () => {
+          document.body.classList.remove('page-pending');
+          hideLoader();
+        };
+
+        const waitForInitialReady = () => {
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            revealPage();
+          };
+
+          const waitLoad = new Promise((resolve) => {
+            if (document.readyState === 'complete') {
+              resolve();
+              return;
+            }
+            window.addEventListener('load', resolve, { once: true });
+          });
+
+          const waitFonts = document.fonts?.ready
+            ? document.fonts.ready.catch(() => undefined)
+            : Promise.resolve();
+
+          Promise.race([
+            Promise.all([waitLoad, waitFonts]),
+            new Promise((resolve) => setTimeout(resolve, 5000))
+          ]).then(finish);
+        };
+        waitForInitialReady();
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) {
+            revealPage();
+          }
+        });
+
+        const prefetchEnabled = (() => {
+          try {
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const saveData = Boolean(conn && conn.saveData);
+            const type = String(conn && conn.effectiveType || '').toLowerCase();
+            if (saveData) return false;
+            if (type === '2g' || type === 'slow-2g') return false;
+            return true;
+          } catch (error) {
+            return true;
+          }
+        })();
+
+        const prefetched = new Set();
+        const prefetch = (href) => {
+          if (!prefetchEnabled) return;
+          if (!href) return;
+          try {
+            const url = new URL(href, window.location.origin);
+            if (url.origin !== window.location.origin) return;
+            if (url.pathname === window.location.pathname && url.hash) return;
+            const normalized = url.pathname.endsWith('/') || url.pathname.endsWith('.html') ? url.pathname + url.search : url.pathname + '/' + url.search;
+            if (prefetched.has(normalized)) return;
+            prefetched.add(normalized);
+
+            const doPrefetch = () => {
+              const link = document.createElement('link');
+              link.rel = 'prefetch';
+              link.href = normalized;
+              link.as = 'document';
+              document.head.appendChild(link);
+            };
+
+            if ('requestIdleCallback' in window) {
+              window.requestIdleCallback(doPrefetch, { timeout: 1200 });
+            } else {
+              setTimeout(doPrefetch, 160);
+            }
+          } catch (error) {
+            // ignore
+          }
+        };
+
+        const navigateFast = (href) => {
+          if (!href) return;
+          startLeaving();
+          showLoader();
+          if (loaderTimer) {
+            clearTimeout(loaderTimer);
+            loaderTimer = null;
+          }
+          requestAnimationFrame(() => {
+            window.location.href = href;
+          });
+        };
+
+        document.addEventListener('click', (event) => {
+          const card = event.target.closest('.post-card');
+          if (card && !event.target.closest('a, button, input, textarea, select, label')) {
+            const href = card.getAttribute('data-href');
+            if (href) {
+              navigateFast(href);
+              return;
+            }
+          }
+
+          const link = event.target.closest('a');
+          if (!link) return;
+          if (link.target === '_blank' || link.hasAttribute('download')) return;
+          const url = new URL(link.href, window.location.origin);
+          if (url.origin !== window.location.origin) return;
+          if (url.pathname === window.location.pathname && url.hash) return;
+
+          event.preventDefault();
+          navigateFast(url.href);
+        });
+
+        document.addEventListener('pointerover', (event) => {
+          const card = event.target.closest('.post-card');
+          if (card) {
+            prefetch(card.getAttribute('data-href'));
+            return;
+          }
+          const link = event.target.closest('a');
+          if (!link) return;
+          if (link.target === '_blank' || link.hasAttribute('download')) return;
+          prefetch(link.href);
+        }, { passive: true });
+
+        document.addEventListener('focusin', (event) => {
+          const card = event.target.closest('.post-card');
+          if (card) {
+            prefetch(card.getAttribute('data-href'));
+            return;
+          }
+          const link = event.target.closest('a');
+          if (!link) return;
+          if (link.target === '_blank' || link.hasAttribute('download')) return;
+          prefetch(link.href);
+        });
+
+        const prefetchVisibleCards = () => {
+          if (!prefetchEnabled) return;
+          if (!('IntersectionObserver' in window)) return;
+          const cards = Array.from(document.querySelectorAll('.post-card[data-href]')).slice(0, 6);
+          if (!cards.length) return;
+          const io = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const href = entry.target.getAttribute('data-href');
+              prefetch(href);
+              io.unobserve(entry.target);
+            }
+          }, { rootMargin: '300px 0px' });
+          for (const card of cards) io.observe(card);
+        };
+        prefetchVisibleCards();
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter') return;
+          const card = event.target.closest('.post-card');
+          if (!card) return;
+          const href = card.getAttribute('data-href');
+          if (!href) return;
+          navigateFast(href);
+        });
+
+        const initMermaid = () => {
+          const mermaidBlocks = document.querySelectorAll('.mermaid');
+          if (!mermaidBlocks.length) return;
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+          script.onload = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+            if (window.mermaid) {
+              window.mermaid.initialize({ startOnLoad: false, theme: currentTheme });
+              window.mermaid.init(undefined, mermaidBlocks);
+            }
+          };
+          document.head.appendChild(script);
+        };
+
+        const initMath = () => {
+          const contentRoot = document.querySelector('.markdown-body');
+          if (!contentRoot) return;
+          const katexScript = document.createElement('script');
+          katexScript.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+          katexScript.onload = () => {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js';
+            script.onload = () => {
+              if (!window.renderMathInElement) return;
+              window.renderMathInElement(contentRoot, {
+                delimiters: [
+                  { left: '$$', right: '$$', display: true },
+                  { left: '$', right: '$', display: false }
+                ],
+                throwOnError: false
+              });
+            };
+            document.head.appendChild(script);
+          };
+          document.head.appendChild(katexScript);
+        };
+
+        initMermaid();
+        initMath();
+      })();
+    </script>
+  </body>
+</html>
