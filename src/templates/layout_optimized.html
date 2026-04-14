@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}" />
+    <meta name="application-name" content="Multi Author Blog Template" />
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <link rel="canonical" href="{{canonicalUrl}}" />
+    <meta property="og:title" content="{{ogTitle}}" />
+    <meta property="og:description" content="{{ogDescription}}" />
+    <meta property="og:url" content="{{ogUrl}}" />
+    <meta property="og:type" content="{{ogType}}" />
+    <meta property="og:image" content="{{ogImage}}" />
+    <meta property="og:site_name" content="Multi Author Blog Template" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="{{twitterCard}}" />
+    <meta name="twitter:title" content="{{ogTitle}}" />
+    <meta name="twitter:description" content="{{ogDescription}}" />
+    <meta name="twitter:image" content="{{ogImage}}" />
+    
+    <!-- Critical CSS inlined for faster initial render -->
+    <style>
+      
+      /* Critical CSS - Above the fold styles */
+      :root{--bg:#ece6d8;--panel:#f6f1e5;--text:#2f2a22;--muted:#766b59;--line:#cdc1ad;--accent:#7d6c4e;--title-hover:#65583f;--bg-gradient:radial-gradient(circle at top left,#faf6ed 0%,#e8decd 58%,#d6c9b3 100%);--bg-grid-size:18px;--bg-grid-color:rgba(79,67,48,0.04);--card-shadow:0 12px 24px rgba(49,40,28,0.12);--soft-shadow:0 4px 12px rgba(49,40,28,0.09);--callout-note:#6b7a99;--callout-tip:#5f8a6d;--callout-warning:#b07a3a;--callout-caution:#b0584f;--callout-important:#7a6a9a}
+      
+      *{box-sizing:border-box}
+      body{margin:0;font-family:"Ancizar Serif","Noto Serif SC Adjusted","Noto Serif SC",serif;font-optical-sizing:none;font-weight:400;background-color:var(--bg);background-image:linear-gradient(var(--bg-grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid-color) 1px,transparent 1px);background-size:var(--bg-grid-size) var(--bg-grid-size);background-position:center;color:var(--text);line-height:1.7;position:relative;min-height:100vh;display:flex;flex-direction:column}
+      body.page-pending *{opacity:0;transition:none!important}
+      .container{width:min(900px,92vw);margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--card-shadow);animation:page-fade-in 0.68s ease both}
+      .site-header{display:flex;justify-content:space-between;align-items:center;padding:26px 0 20px;animation:page-fade-in 0.68s ease both}
+      .brand{display:inline-flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:500;color:var(--text);text-decoration:none}
+      .brand-mark-wrap{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--panel);display:inline-grid;place-items:center}
+      .brand-mark{width:22px;height:22px;display:block}
+      nav{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px}
+      nav a{color:var(--muted);text-decoration:none}
+      .theme-toggle{border:1px solid var(--line);background:transparent;border-radius:999px;padding:4px 11px;cursor:pointer}
+      h1,h2,h3,h4,h5,h6{margin-top:0}
+      .meta{color:var(--muted);font-size:0.94rem}
+      .post-list{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:18px}
+      .post-list li{position:relative;display:flex;overflow:hidden;border-radius:18px;padding:18px;border:1px solid var(--line);background:var(--panel);transition:transform 0.2s ease}
+      
+      /* Minimal dark mode support */
+      [data-theme="dark"]{--bg:#10161f;--panel:#18212d;--text:#e7ebf3;--muted:#9ba8bd}
+      [data-theme="dark"] .container{background:var(--panel);border-color:var(--line)}
+      
+      @keyframes page-fade-in{from{opacity:0}to{opacity:1}}
+    </style>
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="/public/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="/public/fonts/ancizar-serif.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    
+    <!-- Defer non-critical styles -->
+    <link rel="stylesheet" href="/assets/style.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all'">
+    
+    <script>
+      (() => {
+        try {
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          const getAutoTheme = () => (mediaQuery.matches ? 'dark' : 'light');
+          const savedMode = localStorage.getItem('theme-mode') || 'auto';
+          const theme = savedMode === 'auto' ? getAutoTheme() : savedMode;
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (error) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  </head>
+  <body class="{{bodyClass}} page-pending" style="{{bodyStyle}}">
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+      <div class="spinner"></div>
+    </div>
+    <header class="site-header" data-nosnippet>

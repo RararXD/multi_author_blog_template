@@ -5,6 +5,7 @@ import MarkdownIt from 'markdown-it';
 import markdownItFootnote from 'markdown-it-footnote';
 import markdownItMark from 'markdown-it-mark';
 import markdownItTaskLists from 'markdown-it-task-lists';
+import sharp from 'sharp';
 
 const root = process.cwd();
 const srcDir = path.join(root, 'src');
@@ -1421,6 +1422,129 @@ function copyStatic() {
 function copyImages() {
   if (!fs.existsSync(imagesDir)) return;
   copyDirRecursive(imagesDir, path.join(distDir, 'images'));
+}
+
+async function optimizeImages() {
+  console.log('\n🖼️  Optimizing images to WebP format...');
+  
+  const outputImagesDir = path.join(distDir, 'images');
+
+  if (!fs.existsSync(imagesDir)) {
+    console.log('  ⏭️  No images directory found, skipping optimization');
+    return;
+  }
+
+  const entries = fs.readdirSync(imagesDir, { withFileTypes: true });
+  let processed = 0;
+  let converted = 0;
+  let saved = 0;
+  let originalSize = 0;
+  let optimizedSize = 0;
+
+  const processFileOrDir = async (dirPath, depth = 0) => {
+    try {
+      const currentEntries = fs.readdirSync(dirPath, { withFileTypes: true });
+      
+      for (const entry of currentEntries) {
+        const fullPath = path.join(dirPath, entry.name);
+        const relativePath = path.relative(imagesDir, fullPath);
+        const ext = path.extname(entry.name).toLowerCase().slice(1);
+        
+        const optDir = path.join(outputImagesDir, path.dirname(relativePath));
+        fs.mkdirSync(optDir, { recursive: true });
+
+        // Supported image formats
+        if (['png', 'jpg', 'jpeg', 'gif', 'bmp'].includes(ext)) {
+          const webpName = path.basename(entry.name, '.' + ext) + '.webp';
+          const outputPath = path.join(optDir, webpName);
+          
+          try {
+            const inputStats = fs.statSync(fullPath);
+            originalSize += inputStats.size;
+
+            const outputBuffer = await sharp(fullPath)
+              .webp({
+                quality: 80,
+                effort: 3,
+                preset: 3,
+                lossless: false,
+              })
+              .toBuffer();
+
+            fs.writeFileSync(outputPath, outputBuffer);
+            optimizedSize += outputBuffer.length;
+            processed++;
+            converted++;
+            saved += (inputStats.size - outputBuffer.length);
+            console.log(`  ✅ ${path.relative(imagesDir, fullPath)} (${(inputStats.size/1024).toFixed(1)}KB → ${(outputBuffer.length/1024).toFixed(1)}KB)`);
+          } catch (error) {
+            console.error(`  ❌ Failed ${relativePath}: ${error.message}`);
+          }
+        } else if (entry.isDirectory() && !entry.name.startsWith('.')) {
+          // Process subdirectories recursively
+          await processFileOrDir(fullPath, depth + 1);
+        }
+      }
+    } catch (error) {
+      console.error(`Error processing directory ${dirPath}:`, error.message);
+    }
+  };
+
+  // Start processing from main images directory
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      if (!entry.name.startsWith('.')) {
+        const subDir = path.join(imagesDir, entry.name);
+        await processFileOrDir(subDir);
+      }
+    } else {
+      const ext = path.extname(entry.name).toLowerCase().slice(1);
+      if (['png', 'jpg', 'jpeg', 'gif', 'bmp'].includes(ext)) {
+        const webpName = path.basename(entry.name, '.' + ext) + '.webp';
+        const outputPath = path.join(outputImagesDir, webpName);
+        
+        try {
+          const inputStats = fs.statSync(path.join(imagesDir, entry.name));
+          originalSize += inputStats.size;
+
+          const outputBuffer = await sharp(path.join(imagesDir, entry.name))
+            .webp({
+              quality: 80,
+              effort: 3,
+              preset: 3,
+              lossless: false,
+            })
+            .toBuffer();
+
+          fs.writeFileSync(outputPath, outputBuffer);
+          optimizedSize += outputBuffer.length;
+          processed++;
+          converted++;
+          saved += (inputStats.size - outputBuffer.length);
+          console.log(`  ✅ entry.name (${(inputStats.size/1024).toFixed(1)}KB → ${(outputBuffer.length/1024).toFixed(1)}KB)`);
+        } catch (error) {
+          console.error(`  ❌ Failed ${entry.name}: ${error.message}`);
+        }
+      }
+    }
+  }
+
+  const percentage = originalSize > 0 ? ((originalSize - optimizedSize) / originalSize * 100).toFixed(1) : 0;
+  console.log(`\n📊 Image optimization complete:`);
+  console.log(`  Processed:     ${processed} images`);
+  console.log(`  Converted:     ${converted} images to WebP`);
+  console.log(`  Space saved:   ${(saved/1024).toFixed(1)} KB (${percentage}%)`);
+}
+
+function runOptimizeMode() {
+  optimizeImages().then(() => {
+    console.log('\n✅ Image optimization complete!');
+  });
+}
+
+if (process.argv.includes('--optimize-images')) {
+  runOptimizeMode();
+  process.exit(0);
 }
 
 removeDir(distDir);

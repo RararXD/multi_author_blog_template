@@ -416,8 +416,8 @@ nav a:hover {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: calc(2.4em + 12px);
-  padding: 12px 0 2px;
+  min-height: 2.4em;
+  padding: 0;
   align-self: start;
 }
 .post-list li:hover .post-card-title {
@@ -614,11 +614,12 @@ nav a:hover {
 }
 .post-main {
   min-width: 0;
-  align-self: center;
+  align-self: stretch;
   display: grid;
-  grid-template-rows: 32px minmax(2.6em, auto) minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
   text-align: left;
-  gap: 10px;
+  gap: 12px;
+  align-content: center;
 }
 .post-main > .meta,
 .post-main > p {
@@ -633,6 +634,7 @@ nav a:hover {
   overflow: hidden;
   align-self: start;
   min-height: 3.2em;
+  margin: 0;
 }
 .post-card .post-meta-row {
   gap: 10px;
@@ -655,8 +657,8 @@ nav a:hover {
 }
 .post-card .post-meta {
   width: 100%;
-  min-height: 32px;
-  height: 32px;
+  min-height: 0;
+  height: auto;
   display: flex;
   align-items: flex-start;
 }
